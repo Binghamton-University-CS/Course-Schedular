@@ -29,7 +29,11 @@ int main(){
         size_t space;
 
         while((space = (command.find(" "))) != string::npos) {
-            copiedCommand.push_back(command.substr(0, space));
+            // copiedCommand.push_back(command.substr(0, space));
+            string more = command.substr(0, space);
+            if(more.size() != 0) {
+                copiedCommand.push_back(more);
+            }
             command.erase(0, space + 1);
         }
         copiedCommand.push_back(command);
@@ -38,42 +42,46 @@ int main(){
             smatch match;
             if(copiedCommand.size() < 5) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
-            else if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}")) && regex_match(copiedCommand.at(2), match, regex("^[A-Z]{2,4}")) && regex_match(copiedCommand.at(3), match, regex("^[1-4][0-9][0-9][A-Z]?"))) {      //  && regex_match(copiedCommand.at(4), match, regex("^((?![0-9])[\S])+"))
-                cout << "Success: built course " << copiedCommand.at(2) << copiedCommand.at(3) << " (CRN: " << copiedCommand.at(1) << "): " << copiedCommand.at(4) << endl;
-                cout << endl;
-            }
-            else if(copiedCommand.at(1).size() > 6 || copiedCommand.at(1).size() < 6) {
-                cout << "Input Error: " << copiedCommand.at(1) << " is not a valid CRN" << endl;
-                cout << endl;
-            }
-            // else if(islower(copiedCommand.at(2))) {
-            //     cout << "Input Error: " << copiedCommand.at(2) << " is not a valid department" << endl;
-            //     cout << endl;
-            // }
-            else if(copiedCommand.at(3).size() > 4 || copiedCommand.at(3).size() < 1) {
-                cout << "Input Error: " << copiedCommand.at(3) << " is not a valid course number" << endl;
-                cout << endl;
+            if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}"))) {      //  && regex_match(copiedCommand.at(4), match, regex("^((?![0-9])[\S])+"))
+                if(regex_match(copiedCommand.at(2), match, regex("^[A-Z]{2,4}"))) { // DEPARTMENT
+                    if(regex_match(copiedCommand.at(3), match, regex("^[1-6][0-9][0-9]"))) { // [1-6][0-9][0-9][A-Z]? NUMBER
+                        unsigned int i;
+                        string name = "";
+
+                        for(i = 4; i < copiedCommand.size(); i++) {
+                            name += copiedCommand.at(i);
+                            if(i != copiedCommand.size() - 1) {
+                                name += " ";
+                            }
+                        }
+                        cout << "Success: built course " << copiedCommand.at(2) << copiedCommand.at(3) << " (CRN: " << copiedCommand.at(1) << "): " << name << endl;
+                    }
+                    else {
+                        cout << "Input Error: illegal Course Number" << endl;
+                    }
+                }
+                else {
+                    cout << "Input Error: illegal Department" << endl;
+                }
             }
             else {
-                cout << "Invalid" << endl;
+                cout << "Input Error: illegal CRN" << endl;
             }
         }
         else if(copiedCommand.front() == "cancel") {
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
-            else if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}"))) {
+            if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}"))) {
                 cout << "Success: cancelled course " << copiedCommand.at(1) << endl;
                 cout << endl;
             }
-            else if(copiedCommand.at(1).size() < 6 || copiedCommand.at(1).size() > 6) {
-                cout << "Input Error: " << copiedCommand.at(1) << " is not a valid CRN" << endl;
-                cout << endl;
-            }
             else {
-                cout << "Invalid" << endl;
+                cout << "Input Error: invalid CRN" << endl;
                 cout << endl;
             }
         }
@@ -81,71 +89,83 @@ int main(){
             smatch match;
             if(copiedCommand.size() < 5) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
-            else if(regex_match(copiedCommand.at(1), match, regex("^B[0-9]{9}")) && regex_match(copiedCommand.at(2), match, regex("^[a-z]{2,4}"))) {
-                cout << "Success: enrolled student " << copiedCommand.at(1) << " (" << copiedCommand.at(2) << ") " << copiedCommand.at(4) << ", " << copiedCommand.at(3) << endl;
-                cout << endl;
-            }
-            else if(copiedCommand.at(1).size() > 9 || copiedCommand.at(1).size() < 9) {
-                cout << "Input Error: " << copiedCommand.at(1) << " is not a valid B numbers" << endl;
-                cout << endl;
-            }
-            else if(copiedCommand.at(2).size() > 6 || copiedCommand.at(1).size() < 6) {
-                cout << "Input Error: " << copiedCommand.at(1) << " is not a valid CRN" << endl;
-                cout << endl;
+            if(regex_match(copiedCommand.at(1), match, regex("^[B][0-9]{8}"))) {
+                if(regex_match(copiedCommand.at(2), match, regex("^[a-z]+[a-z0-9]+[0-9]*"))) {
+                    cout << "Success: enrolled student " << copiedCommand.at(1) << " (" << copiedCommand.at(2) << ") " << copiedCommand.at(4) << ", " << copiedCommand.at(3) << endl;
+                    cout << endl;
+                }
+                else {
+                    cout << "Input Error: invalid User ID" << endl;
+                }
             }
             else {
-                cout << "Invalid" << endl;
+                cout << "Input Error: invalid B-number" << endl;
             }
         }
         else if(copiedCommand.front() == "add") {
             smatch match;
             if(copiedCommand.size() < 3) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
-            else if(regex_match(copiedCommand.at(1), match, regex("^B[0-9]{8}")) && regex_match(copiedCommand.at(2), match, regex("^[0-9]{6}"))) {
-                cout << "Success: added student " << copiedCommand.at(1) << " into course " << copiedCommand.at(2) << endl;
-                cout << endl;
+            if(regex_match(copiedCommand.at(1), match, regex("^[B][0-9]{8}"))) {
+                if(regex_match(copiedCommand.at(2), match, regex("^[0-9]{6}"))){
+                    cout << "Success: added student " << copiedCommand.at(1) << " into course " << copiedCommand.at(2) << endl;
+                    cout << endl;
+                }
+                else {
+                    cout << "Input Error: invalid CRN" << endl;
+                }
             }
             else {
-                cout << "Invalid" << endl;
+                cout << "Input Error: invalid B-number" << endl;
             }
         }
         else if(copiedCommand.front() == "drop") {
             smatch match;
             if(copiedCommand.size() < 3) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
-            else if(regex_match(copiedCommand.at(1), match, regex("^B[0-9]{8}")) && regex_match(copiedCommand.at(2), match, regex("^[0-9]{6}"))) {
-                cout << "Success: removed student " << copiedCommand.at(1) << " from course " << copiedCommand.at(2) << endl;
-                cout << endl;
+            if(regex_match(copiedCommand.at(1), match, regex("^[B][0-9]{8}"))) {
+                if(regex_match(copiedCommand.at(2), match, regex("^[0-9]{6}"))) {
+                    cout << "Success: removed student " << copiedCommand.at(1) << " from course " << copiedCommand.at(2) << endl;
+                    cout << endl;
+                }
+                else {
+                    cout << "Input Error: invalid CRN" << endl;
+                }
             }
             else {
-                cout << "Invalid" << endl;
+                cout << "Input Error: invalid B-number" << endl;
             }
         }
         else if(copiedCommand.front() == "roster") {
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
-            else if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}"))) {
-                cout << "Success: " << endl;
+            if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}"))) {
+                cout << "Roster: " << copiedCommand.at(1) << endl;
             }
             else {
-                cout << "Invalid" << endl;
+                cout << "Input Error: invalid CRN" << endl;
             }
         }
         else if(copiedCommand.front() == "schedule") {
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
+                exit(0);
             }
             else if(regex_match(copiedCommand.at(1), match, regex("^B[0-9]{8}"))) {
-                cout << "Valid" << endl;
+                cout << "Student: " << copiedCommand.at(1) << endl;
             }
             else {
-                cout << "Invalid Command" << endl;
+                cout << "Input Error: invalid B-number" << endl;
             }
         }
         else if(copiedCommand.front() == "quit") {
