@@ -1,86 +1,171 @@
-#include "StudentList.h"
+#include <stdlib.h>
+#include <iostream>
 
-Course::StudentList() {
+#include "StudentList.h"
+// #include "Course.cpp"
+
+StudentList::StudentList() {
     firstName = "";
-    secondName = "";
+    lastName = "";
     userID = "";
     bNumber = "";
+    capacity = 1;
+    currentQuantity = 0;
+    allStudents = new Student[capacity];
 }
 
-Course::StudentList(string newFirst, string newSecond, string newUserID, string newBNumber) {
+StudentList::StudentList(string newBNumber, string newUserID, string newFirst, string newLast){
     firstName = newFirst;
-    secondName = newSecond;
+    lastName = newLast;
     userID = newUserID;
+    bNumber = newBNumber;
+    capacity = 1;
+    currentQuantity = 0;
+    allStudents = new Student[capacity];
+}
+
+StudentList::StudentList(string newBNumber) {
     bNumber = newBNumber;
 }
 
-Course::StudentList(const StudentList& student) {
-    firstName = student.firstName;
-    secondName = student.secondName;
-    userID = student.userID;
-    bNumber = student.bNumber;
+StudentList::~StudentList() {
+    delete[] allStudents;
 }
 
-Course::~StudentList() {
-    delete[] students;
-}
+// StudentList StudentList::operator=(const Student& newStudent) {
+//     firstName = newStudent.firstName;
+//     lastName = newStudent.lastName;
+//     userID = newStudent.userID;
+//     bNumber = newStudent.bNumber;
+//     capacity = newStudent.capacity;
+//     currentQuantity = newStudent.currentQuantity;
+// }
 
-void Course::showRegStudents() {
-    int i;
+// bool StudentList::checkStudentExists(Student newStudent) {
+//     for(int i = 0; i < currentQuantity; i++) {
+//         if(allStudents[i] == newStudent) {
+//             return false;
+//         }
+//     }
+//     return false;
+// }
 
-    for(i = 0; i < regStudents.size(); i++) {
-        cout << retStudents.at(i) << endl;
+bool StudentList::searchByBnum(string bNum){
+    for(int i = 0; i < currentQuantity; i++) {
+        if(allStudents[i].getBNumber() == bNum) {
+            return false;
+        }
     }
- }
-
-void Course::resizeArray(){
-    capacity = capacity * 2;
-    StudentList* newRegStudents = new StudentList[capacity];
-
-    for(int i = 0; i < currentQuantity; i++){
-        newRegStudents[i] = regStudents[i]; // copy over values   
-    }
-    // memory management    
-    delete[] regstudents;
-    regstudents = newRegStudents;
+    return true;
+}
+        
+void StudentList::enrollStudent(Student enrollStudent) {
+    // cout << "is it here?" << endl;
+    // // allStudents = new StudentList[capacity];
+    // if(currentQuantity == capacity){
+    //     resizeArray();
+    // }
+    // cout << "does it work here?" << endl;
+    // if(checkStudentExists(enrollStudent)) {
+    //     cout << "Student already exists" << endl;
+    // }
+    // else {
+    //     cout << currentQuantity << endl;
+    //     allStudents[currentQuantity] = enrollStudent;
+    //     cout << "one" << endl;
+    //     cout << allStudents[currentQuantity].firstName << endl;
+    //     cout << "two" << endl;
+    //     currentQuantity += 1;
+    // }
 }
 
-void Course::insertStudent(StudentList toAdd){
+void StudentList::addStudent(Student addStudent) {
     if(currentQuantity == capacity){
         resizeArray();
     }
-    registeredStudents[currentQuantity] = toAdd;
-    currentQuantity++:
+    if(searchByBnum(addStudent.getBNumber())) {
+        allStudents[currentQuantity] = addStudent;
+        currentQuantity += 1;
+        print();
+    }
+    else {
+        cout << "Student already exists" << endl;
+    }
 }
 
-string Course::getFirstName(){
+void StudentList::removeStudent(Student removeStudent) {
+    // if(checkStudentExists(removeStudent)) {
+    //     cout << "Student doesn't exists" << endl;
+    // }
+    // else {
+    //     for(int i = 0; i < allStudents.size(); i++) {
+    //         if(allStudents[i] == removeStudent) {
+    //             break;
+    //         }
+    //     }
+    //     currentQuantity -= 1;
+    // }
+}
+
+void StudentList::resizeArray(){
+    capacity = capacity * 2;
+    Student* newStudent = new Student[capacity];
+
+    for(int i = 0; i < currentQuantity; i++){
+        newStudent[i] = allStudents[i]; // copy over values   
+    }
+    // memory management    
+    delete[] allStudents;
+    allStudents = newStudent;
+}
+
+void StudentList::print() {
+    // cout << sizeof(allStudents)/sizeof(allStudents[0]) << endl;
+    // cout << currentQuantity << endl;
+    //  cout << " " << allStudents[0].getFirstName() << " " << allStudents[0].getLastName() << " " << allStudents[0].getBNumber() << endl;
+    for(int i = 0; i < currentQuantity; i++) {
+        cout << allStudents[i].getFirstName() << " " << allStudents[i].getLastName() << " " << allStudents[i].getUserID() << " " << allStudents[i].getBNumber() << endl;
+        // cout << allStudents[i] << endl;
+        cout << endl;
+    }
+}
+
+// void Course::insertStudent(Student* addStudent){
+//     if(currentQuantity == capacity){
+//         resizeArray();
+//     }
+//     listOfCourses[currentQuantity] = addStudent;
+//     currentQuantity++:
+// }
+
+string StudentList::getFirstName(){
     return firstName;
 }
 
-string Course::getSecondName() {
-    return secondName;
+string StudentList::getLastName() {
+    return lastName;
 }
 
-string Course::getUserID() {
+string StudentList::getUserID() {
     return userID;
 }
 
-string Course::getBNumber() {
+string StudentList::getBNumber() {
     return bNumber;
 }
 
-void Course::setFirstName(string newFirstName) {
+void StudentList::setFirstName(string newFirstName) {
     firstName = newFirstName;
 }
 
-void Course::setDepartment(string newSecondName) {
-    secondName = newSecondName;
+void StudentList::setLastName(string newLastName) {
+    lastName = newLastName;
 }
 
-void Course::setName(string newUserID) {
+void StudentList::setUserID(string newUserID) {
     userID = newUserID;
 }
 
-void Course::setNumber(string newBNumber) {
+void StudentList::setBNumber(string newBNumber) {
     bNumber = newBNumber;
 }

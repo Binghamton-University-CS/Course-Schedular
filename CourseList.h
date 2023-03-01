@@ -1,40 +1,26 @@
-#include <string.h>
+#include <iostream>
 #include <stdlib.h>
-#include "StudentList.h"
 
 using namespace std;
 
-class CourseList{
-    private:
-        string crn;
-        string name;
-        string department;
-        string number;
+#ifndef COURSELIST_H
+#define COURSELIST_H
 
-        // array values
-        int capacity;
-        int currentQuantity;
+#include "Course.h"
 
-        StudentList* regStudents; //array
-    
+class CourseList {
     public:
-        //? implement 4 constructors (default, copy, assignment)
         CourseList();
-        CourseList(string crn, string name, string department, string number);
-        CourseList(const StudentList& student);
-        // also need copy constructor
-        // also need assignment constructor
-
-        // destructor
+        CourseList(string newCRN, string newDepartment, string newNumber, string newName);
         ~CourseList();
-
-        // core functionality methods
-        void showRegStudents(); // loop over registered students and print out (what command roster does)
-
-        //array methods
-        void insertStudent(StudentList toAdd);
+        void searchByCRN(string newCrn);
+        void addCourse(Course addCourse);
+        void removeCourse(Course removeCourse);
         void resizeArray();
+        // void insertCourse(Student* addCourse);
 
+        void printListOfStudents(Course allCourses);
+        bool checkCourseExists(Course newCourse);
 
         // getters: returns value
 
@@ -50,4 +36,15 @@ class CourseList{
         void setDepartment(string newDepartment);
         void setNumber(string newNumber);
 
+    private:
+        // array values
+        int capacity;
+        int currentQuantity;
+        string crn;
+        string name;
+        string department;
+        string number;
+
+        Course* allCourses; // list of all students in a course
 };
+#endif

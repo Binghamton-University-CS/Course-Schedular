@@ -1,11 +1,17 @@
 #include <iostream>
 #include <stdlib.h>
-#include <cstring>
 #include <vector>
-#include <cctype>
 #include <regex>
+
 #include "CourseList.h"
+#include "StudentList.h"
+#include "Student.h"
+#include "Course.h"
+
 using namespace std;
+
+StudentList persons_in_class = StudentList();
+CourseList courses_list = CourseList();
 
 void showPrompt() {
    std::cout << "Enter [\"build <crn> <department> <number> <name>\"" << std::endl <<
@@ -38,7 +44,7 @@ int main(){
         }
         copiedCommand.push_back(command);
 
-        if(copiedCommand.at(0) == "build") {
+        if(copiedCommand.at(0) == "build") {                                          // BUILD
             smatch match;
             if(copiedCommand.size() < 5) {
                 cout << "Input Error: too few arguments" << endl;
@@ -70,7 +76,7 @@ int main(){
                 cout << "Input Error: illegal CRN" << endl;
             }
         }
-        else if(copiedCommand.front() == "cancel") {
+        else if(copiedCommand.front() == "cancel") {                                // CANCEL
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
@@ -85,7 +91,7 @@ int main(){
                 cout << endl;
             }
         }
-        else if(copiedCommand.front() == "enroll") {
+        else if(copiedCommand.front() == "enroll") { // ENROLL
             smatch match;
             if(copiedCommand.size() < 5) {
                 cout << "Input Error: too few arguments" << endl;
@@ -93,18 +99,27 @@ int main(){
             }
             if(regex_match(copiedCommand.at(1), match, regex("^[B][0-9]{8}"))) {
                 if(regex_match(copiedCommand.at(2), match, regex("^[a-z]+[a-z0-9]+[0-9]*"))) {
-                    cout << "Success: enrolled student " << copiedCommand.at(1) << " (" << copiedCommand.at(2) << ") " << copiedCommand.at(4) << ", " << copiedCommand.at(3) << endl;
-                    cout << endl;
+                    cout << "Works here" << endl;
+                    Student student(copiedCommand.at(1), copiedCommand.at(2), copiedCommand.at(3), copiedCommand.at(4));
+                    cout << "here" << endl;
+                    if(persons_in_class.searchByBnum(copiedCommand.at(1))) {
+                        persons_in_class.addStudent(student);
+                    }
+                    else {
+                        cout << "Fail: cannot enroll student, B Number exists" << endl;
+                    }
+                    
                 }
                 else {
                     cout << "Input Error: invalid User ID" << endl;
                 }
+                // delete student;
             }
             else {
                 cout << "Input Error: invalid B-number" << endl;
             }
         }
-        else if(copiedCommand.front() == "add") {
+        else if(copiedCommand.front() == "add") {                                      // ADD
             smatch match;
             if(copiedCommand.size() < 3) {
                 cout << "Input Error: too few arguments" << endl;
@@ -123,7 +138,7 @@ int main(){
                 cout << "Input Error: invalid B-number" << endl;
             }
         }
-        else if(copiedCommand.front() == "drop") {
+        else if(copiedCommand.front() == "drop") {                                      // DROP
             smatch match;
             if(copiedCommand.size() < 3) {
                 cout << "Input Error: too few arguments" << endl;
@@ -142,7 +157,7 @@ int main(){
                 cout << "Input Error: invalid B-number" << endl;
             }
         }
-        else if(copiedCommand.front() == "roster") {
+        else if(copiedCommand.front() == "roster") {                                    // ROSTER
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
@@ -155,7 +170,7 @@ int main(){
                 cout << "Input Error: invalid CRN" << endl;
             }
         }
-        else if(copiedCommand.front() == "schedule") {
+        else if(copiedCommand.front() == "schedule") {                                  // SCHEDULE
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;

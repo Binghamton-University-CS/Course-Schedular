@@ -1,86 +1,130 @@
+#include <stdlib.h>
+#include <iostream>
+
 #include "CourseList.h"
 
-Course::CourseList() {
+CourseList::CourseList() {
     crn = "";
     name = "";
     department = "";
     number = "";
+    capacity = 0;
+    currentQuantity = 0;
 }
 
-Course::CourseList(string newCRN, string newName, string newDepartment, string newNumber) {
+CourseList::CourseList(string newCRN, string newDepartment, string newNumber, string newName) {
     crn = newCRN;
     name = newName;
     department = newDepartment;
     number = newNumber;
+    capacity = 2;
+    currentQuantity = 0;
 }
 
-Course::CourseList(const StudentList& student) {
-    crn = student.crn;
-    name = student.name;
-    department = student.department;
-    number = student.number;
+// CourseList::CourseList(string newCRN) {
+//     crn = newCRN;
+// }
+
+CourseList::~CourseList() {
+    delete[] allCourses;
 }
 
-Course::~CourseList() {
-    delete[] registeredStudents;
+bool CourseList::checkCourseExists(Course newCourse) {
+    // for(int i = 0; i < allCourses.size(); i++) {
+    //     if(allCourses[i] == newStudent) {
+    //         return false;
+    //     }
+    // }
+    return false;
 }
 
-void Course::showRegStudents() {
-    int i;
+// bool CourseList::searchByBnum(string bNum){
+//     int i;
+//     for(i = 0; i < allCourses.size(); i++) {
+//         if(allCourses.bNumber == bNum) {
 
-    for(i = 0; i < regStudents.size(); i++) {
-        cout << regStudents.at(i) << endl;
-    }
- }
-
-void Course::resizeArray(){
-    capacity = capacity * 2;
-    StudentList* newRegStudents = new StudentList[capacity];
-
-    for(int i = 0; i < currentQuantity; i++){
-        newRegStudents[i] = regStudents[i]; // copy over values   
-    }
-    // memory management    
-    delete[] regStudents;
-    regStudents = newRegStudents;
-}
-
-void Course::insertStudent(StudentList toAdd){
+//         }
+//     }
+// }
+        
+void CourseList::addCourse(Course addCourse) {
+    cout << "is it here?" << endl;
+    // allStudents = new CourseList[capacity];
     if(currentQuantity == capacity){
         resizeArray();
     }
-    registeredStudents[currentQuantity] = toAdd;
-    currentQuantity++:
+    cout << "does it work here?" << endl;
+    if(checkCourseExists(addCourse)) {
+        cout << "Student already exists" << endl;
+    }
+    else {
+        cout << currentQuantity << endl;
+        allCourses[currentQuantity] = addCourse;
+        cout << "one" << endl;
+        cout << getCRN() << endl;
+        cout << "two" << endl;
+        currentQuantity += 1;
+    }
 }
 
-string Course::getCRN(){
+void CourseList::removeCourse(Course removeCourse) {
+    if(checkCourseExists(removeCourse)) {
+        cout << "Student doesn't exists" << endl;
+    }
+    else {
+        // allCourses[currentQuantity] = NULL;
+        currentQuantity -= 1;
+    }
+}
+
+void CourseList::resizeArray(){
+    capacity = capacity * 2;
+    Course* newCourses = new Course[capacity];
+
+    for(int i = 0; i < currentQuantity; i++){
+        newCourses[i] = allCourses[i]; // copy over values   
+    }
+    // memory management    
+    delete[] allCourses;
+    allCourses = newCourses;
+}
+
+// void CourseList::insertStudent(Course courseToAdd){
+//     if(currentQuantity == capacity){
+//         resizeArray();
+//     }
+//     registeredStudents[currentQuantity] = toAdd;
+//     currentQuantity++:
+// }
+
+string CourseList::getCRN(){
     return crn;
 }
 
-string Course::getDepartment() {
+string CourseList::getDepartment() {
     return department;
 }
 
-string Course::getName() {
+string CourseList::getName() {
     return name;
 }
 
-string Course::getNumber() {
+string CourseList::getNumber() {
     return number;
 }
 
-void Course::setCRN(string newCRN) {
+void CourseList::setCRN(string newCRN) {
     crn = newCRN;
 }
 
-void Course::setDepartment(string newDepartment) {
+void CourseList::setDepartment(string newDepartment) {
     department = newDepartment;
 }
 
-void Course::setName(string newName) {
+void CourseList::setName(string newName) {
     name = newName;
 }
 
-void Course::setNumber(string newNumber) {
+void CourseList::setNumber(string newNumber) {
     number = newNumber;
 }

@@ -1,52 +1,55 @@
-#include <string.h>
+#include <iostream>
 #include <stdlib.h>
 
 using namespace std;
 
-class StudentList{
+#ifndef STUDENTLIST_H
+#define STUDENTLIST_H
+
+#include "Student.h"
+
+class StudentList {
+    public:
+        StudentList();
+        StudentList(string newBNumber, string newUserID, string newLast, string newFirst); // enroll
+        StudentList(string bNumber); // add & drop & schedule
+        ~StudentList();
+
+        void addStudent(Student addStudent);
+        void removeStudent(Student removeStudent);
+        void enrollStudent(Student enrollStudent);
+        void resizeArray();
+        void print();
+        
+        bool searchByBnum(string bNum);
+        // bool checkStudentExists(Student newStudent);
+
+        void printListOfCourses();
+
     private:
+
+        // array values
+        int capacity;
+        int currentQuantity;
         string firstName;
         string lastName;
         string userID;
         string bNumber;
 
-        // array values
-        int capacity;
-        int currentQuantity;
-
-        StudentList* regStudents; //array
-    
-    public:
-        //? implement 4 constructors (default, copy, assignment)
-        StudentList();
-        StudentList(string firstName, string secondName, string userID, string bNumber);
-        StudentList(const StudentList& student);
-        // also need copy constructor
-        // also need assignment constructor
-
-        // destructor
-        ~StudentList();
-
-        // core functionality methods
-        void showRegStudents(); // loop over registered students and print out (what command roster does)
-
-        //array methods
-        void insertStudent(StudentList toAdd);
-        void resizeArray();
-
+        Student* allStudents; // list of all courses a student takes
 
         // getters: returns value
 
         string getFirstName();
-        string getSecondName();
+        string getLastName();
         string getUserID();
         string getBNumber();
 
         // setters
 
         void setFirstName(string newFirstName);
-        void setSecondName(string newSecondName);
+        void setLastName(string newLastName);
         void setUserID(string newUserID);
         void setBNumber(string newBNumber);
-
 };
+#endif
