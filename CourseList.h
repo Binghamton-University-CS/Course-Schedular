@@ -9,18 +9,35 @@ using namespace std;
 #include "Course.h"
 
 class CourseList {
+    private:
+        // array values
+        int capacity;
+        int currentQuantity;
+        string crn;
+        string name;
+        string department;
+        string number;
+
+        Course* allCourses; 
+
     public:
         CourseList();
         CourseList(string newCRN, string newDepartment, string newNumber, string newName);
         ~CourseList();
-        void searchByCRN(string newCrn);
+
+        // void whatever(int course);
+
+        bool searchByCRN(string newCrn);
+        string searchByCRNReturnInfo(string info);
+
         void addCourse(Course addCourse);
+        // void addCourse();
         void removeCourse(Course removeCourse);
         void resizeArray();
-        // void insertCourse(Student* addCourse);
-
         void printListOfStudents(Course allCourses);
-        bool checkCourseExists(Course newCourse);
+        void print();
+
+        bool checkByCRN(string newCRN);
 
         // getters: returns value
 
@@ -35,16 +52,5 @@ class CourseList {
         void setName(string newName);
         void setDepartment(string newDepartment);
         void setNumber(string newNumber);
-
-    private:
-        // array values
-        int capacity;
-        int currentQuantity;
-        string crn;
-        string name;
-        string department;
-        string number;
-
-        Course* allCourses; // list of all students in a course
 };
 #endif

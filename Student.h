@@ -14,10 +14,10 @@ class Student{
         string lastName;
         string userID;
         string bNumber;
-        int capacity;
-        int currentQuantity;
+        // int capacity;
+        // int currentQuantity;
 
-        Course* allCourses; // list of all courses a students take
+        // Course* allCourses; // list of all courses a students take
     
     public:
         //? implement 4 constructors (default, copy, assignment)
@@ -27,10 +27,10 @@ class Student{
         // ~Student();
 
         // core functionality methods
-        void showCourses(); // loop over registered students and print out (what command roster does)
-        void addCourse(Course addCourse);
-        void resizeArray();
-        bool checkCourseExists(Course newCourse);
+        // void showCourses(); // loop over registered students and print out (what command roster does)
+        // void addCourse(Course addCourse);
+        // void resizeArray();
+        // bool checkCourseExists(Course newCourse);
 
         // getters: returns value
 

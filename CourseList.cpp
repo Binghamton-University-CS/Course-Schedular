@@ -8,8 +8,9 @@ CourseList::CourseList() {
     name = "";
     department = "";
     number = "";
-    capacity = 0;
+    capacity = 1;
     currentQuantity = 0;
+    allCourses = new Course[capacity];
 }
 
 CourseList::CourseList(string newCRN, string newDepartment, string newNumber, string newName) {
@@ -17,65 +18,77 @@ CourseList::CourseList(string newCRN, string newDepartment, string newNumber, st
     name = newName;
     department = newDepartment;
     number = newNumber;
-    capacity = 2;
+    capacity = 1;
     currentQuantity = 0;
+    allCourses = new Course[capacity];
 }
-
-// CourseList::CourseList(string newCRN) {
-//     crn = newCRN;
-// }
 
 CourseList::~CourseList() {
     delete[] allCourses;
 }
 
-bool CourseList::checkCourseExists(Course newCourse) {
-    // for(int i = 0; i < allCourses.size(); i++) {
-    //     if(allCourses[i] == newStudent) {
-    //         return false;
-    //     }
-    // }
+bool CourseList::searchByCRN(string newCRN){
+    for(int i = 0; i < currentQuantity; i++) {
+        if(allCourses[i].getCRN() == newCRN) {
+            return false;
+        }
+    }
+    return true;
+}
+
+string CourseList::searchByCRNReturnInfo(string info) {
+    string str = "";
+    for(int i = 0; i < currentQuantity; i++) {
+        if(allCourses[i].getCRN() == info) {
+            str += allCourses[i].getDepartment() + " " + allCourses[i].getNumber() + " " + allCourses[i].getName();
+            return str;
+        }
+    }
+    return "";
+}
+
+bool CourseList::checkByCRN(string newCRN) {
+    for(int i = 0; i < currentQuantity; i++) {
+        if(allCourses[i].getCRN() == newCRN) {
+            return true;
+        }
+    }
     return false;
 }
 
-// bool CourseList::searchByBnum(string bNum){
-//     int i;
-//     for(i = 0; i < allCourses.size(); i++) {
-//         if(allCourses.bNumber == bNum) {
-
-//         }
-//     }
-// }
-        
 void CourseList::addCourse(Course addCourse) {
-    cout << "is it here?" << endl;
-    // allStudents = new CourseList[capacity];
     if(currentQuantity == capacity){
         resizeArray();
     }
-    cout << "does it work here?" << endl;
-    if(checkCourseExists(addCourse)) {
-        cout << "Student already exists" << endl;
+    if(searchByCRN(addCourse.getCRN())) {
+        allCourses[currentQuantity] = addCourse;
+        currentQuantity += 1;
+        print();
     }
     else {
-        cout << currentQuantity << endl;
-        allCourses[currentQuantity] = addCourse;
-        cout << "one" << endl;
-        cout << getCRN() << endl;
-        cout << "two" << endl;
-        currentQuantity += 1;
+        cout << "Fail: cannot enroll student, B Number exists" << endl;
     }
 }
 
-void CourseList::removeCourse(Course removeCourse) {
-    if(checkCourseExists(removeCourse)) {
-        cout << "Student doesn't exists" << endl;
-    }
-    else {
-        // allCourses[currentQuantity] = NULL;
-        currentQuantity -= 1;
+// void CourseList::whatever(int course) {
+//     cout << course << endl;
+// }
+
+void CourseList::print() {
+    for(int i = 0; i < currentQuantity; i++) {
+        cout << "Success: built course " << allCourses[i].getDepartment() << allCourses[i].getNumber() << " (CRN: " << allCourses[i].getCRN() << "): " << allCourses[i].getName() << endl;
     }
 }
+
+// void CourseList::removeCourse(Course removeCourse) {
+//     if(checkCourseExists(removeCourse)) {
+//         cout << "Student doesn't exists" << endl;
+//     }
+//     else {
+//         // allCourses[currentQuantity] = NULL;
+//         currentQuantity -= 1;
+//     }
+// }
 
 void CourseList::resizeArray(){
     capacity = capacity * 2;
@@ -84,18 +97,10 @@ void CourseList::resizeArray(){
     for(int i = 0; i < currentQuantity; i++){
         newCourses[i] = allCourses[i]; // copy over values   
     }
-    // memory management    
+    // memory management   
     delete[] allCourses;
     allCourses = newCourses;
 }
-
-// void CourseList::insertStudent(Course courseToAdd){
-//     if(currentQuantity == capacity){
-//         resizeArray();
-//     }
-//     registeredStudents[currentQuantity] = toAdd;
-//     currentQuantity++:
-// }
 
 string CourseList::getCRN(){
     return crn;

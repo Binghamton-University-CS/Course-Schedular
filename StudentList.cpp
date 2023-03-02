@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "StudentList.h"
-// #include "Course.cpp"
 
 StudentList::StudentList() {
     firstName = "";
@@ -24,31 +23,9 @@ StudentList::StudentList(string newBNumber, string newUserID, string newFirst, s
     allStudents = new Student[capacity];
 }
 
-StudentList::StudentList(string newBNumber) {
-    bNumber = newBNumber;
-}
-
 StudentList::~StudentList() {
     delete[] allStudents;
 }
-
-// StudentList StudentList::operator=(const Student& newStudent) {
-//     firstName = newStudent.firstName;
-//     lastName = newStudent.lastName;
-//     userID = newStudent.userID;
-//     bNumber = newStudent.bNumber;
-//     capacity = newStudent.capacity;
-//     currentQuantity = newStudent.currentQuantity;
-// }
-
-// bool StudentList::checkStudentExists(Student newStudent) {
-//     for(int i = 0; i < currentQuantity; i++) {
-//         if(allStudents[i] == newStudent) {
-//             return false;
-//         }
-//     }
-//     return false;
-// }
 
 bool StudentList::searchByBnum(string bNum){
     for(int i = 0; i < currentQuantity; i++) {
@@ -58,25 +35,25 @@ bool StudentList::searchByBnum(string bNum){
     }
     return true;
 }
-        
-void StudentList::enrollStudent(Student enrollStudent) {
-    // cout << "is it here?" << endl;
-    // // allStudents = new StudentList[capacity];
-    // if(currentQuantity == capacity){
-    //     resizeArray();
-    // }
-    // cout << "does it work here?" << endl;
-    // if(checkStudentExists(enrollStudent)) {
-    //     cout << "Student already exists" << endl;
-    // }
-    // else {
-    //     cout << currentQuantity << endl;
-    //     allStudents[currentQuantity] = enrollStudent;
-    //     cout << "one" << endl;
-    //     cout << allStudents[currentQuantity].firstName << endl;
-    //     cout << "two" << endl;
-    //     currentQuantity += 1;
-    // }
+
+string StudentList::searchByBnumReturnName(string bNum){
+    string str = "";
+    for(int i = 0; i < currentQuantity; i++) {
+        if(allStudents[i].getBNumber() == bNum) {
+            str += allStudents[i].getFirstName() + " " + allStudents[i].getLastName();
+            return str;
+        }
+    }
+    return "";
+}
+
+bool StudentList::checkByBNum(string newBNumber) {
+    for(int i = 0; i < currentQuantity; i++) {
+        if(allStudents[i].getBNumber() == newBNumber) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void StudentList::addStudent(Student addStudent) {
@@ -89,7 +66,7 @@ void StudentList::addStudent(Student addStudent) {
         print();
     }
     else {
-        cout << "Student already exists" << endl;
+        cout << "Fail: cannot enroll student, B Number exists" << endl;
     }
 }
 
@@ -114,29 +91,17 @@ void StudentList::resizeArray(){
     for(int i = 0; i < currentQuantity; i++){
         newStudent[i] = allStudents[i]; // copy over values   
     }
-    // memory management    
+    // memory management 
+    cout << "here?" << endl;   
     delete[] allStudents;
     allStudents = newStudent;
 }
 
 void StudentList::print() {
-    // cout << sizeof(allStudents)/sizeof(allStudents[0]) << endl;
-    // cout << currentQuantity << endl;
-    //  cout << " " << allStudents[0].getFirstName() << " " << allStudents[0].getLastName() << " " << allStudents[0].getBNumber() << endl;
     for(int i = 0; i < currentQuantity; i++) {
-        cout << allStudents[i].getFirstName() << " " << allStudents[i].getLastName() << " " << allStudents[i].getUserID() << " " << allStudents[i].getBNumber() << endl;
-        // cout << allStudents[i] << endl;
-        cout << endl;
+        cout << "Success: enrolled student " << allStudents[i].getBNumber() << " (" << allStudents[i].getUserID() << ") " << allStudents[i].getLastName() << ", " << allStudents[i].getFirstName() << endl;
     }
 }
-
-// void Course::insertStudent(Student* addStudent){
-//     if(currentQuantity == capacity){
-//         resizeArray();
-//     }
-//     listOfCourses[currentQuantity] = addStudent;
-//     currentQuantity++:
-// }
 
 string StudentList::getFirstName(){
     return firstName;
@@ -169,3 +134,21 @@ void StudentList::setUserID(string newUserID) {
 void StudentList::setBNumber(string newBNumber) {
     bNumber = newBNumber;
 }
+
+// StudentList StudentList::operator=(const Student& newStudent) {
+//     firstName = newStudent.firstName;
+//     lastName = newStudent.lastName;
+//     userID = newStudent.userID;
+//     bNumber = newStudent.bNumber;
+//     capacity = newStudent.capacity;
+//     currentQuantity = newStudent.currentQuantity;
+// }
+
+// bool StudentList::checkStudentExists(Student newStudent) {
+//     for(int i = 0; i < currentQuantity; i++) {
+//         if(allStudents[i] == newStudent) {
+//             return false;
+//         }
+//     }
+//     return false;
+// }

@@ -12,7 +12,6 @@ class StudentList {
     public:
         StudentList();
         StudentList(string newBNumber, string newUserID, string newLast, string newFirst); // enroll
-        StudentList(string bNumber); // add & drop & schedule
         ~StudentList();
 
         void addStudent(Student addStudent);
@@ -21,7 +20,9 @@ class StudentList {
         void resizeArray();
         void print();
         
+        bool checkByBNum(string newBNumber);
         bool searchByBnum(string bNum);
+        string searchByBnumReturnName(string bNum);
         // bool checkStudentExists(Student newStudent);
 
         void printListOfCourses();

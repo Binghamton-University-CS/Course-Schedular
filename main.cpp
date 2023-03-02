@@ -7,11 +7,14 @@
 #include "StudentList.h"
 #include "Student.h"
 #include "Course.h"
+#include "Registration.h"
+#include "RegistrationList.h"
 
 using namespace std;
 
 StudentList persons_in_class = StudentList();
 CourseList courses_list = CourseList();
+RegistrationList regList = RegistrationList();
 
 void showPrompt() {
    std::cout << "Enter [\"build <crn> <department> <number> <name>\"" << std::endl <<
@@ -44,7 +47,7 @@ int main(){
         }
         copiedCommand.push_back(command);
 
-        if(copiedCommand.at(0) == "build") {                                          // BUILD
+        if(copiedCommand.at(0) == "build") { // BUILD
             smatch match;
             if(copiedCommand.size() < 5) {
                 cout << "Input Error: too few arguments" << endl;
@@ -62,7 +65,13 @@ int main(){
                                 name += " ";
                             }
                         }
-                        cout << "Success: built course " << copiedCommand.at(2) << copiedCommand.at(3) << " (CRN: " << copiedCommand.at(1) << "): " << name << endl;
+                        Course course(copiedCommand.at(1), copiedCommand.at(2), copiedCommand.at(3), name);
+                        if(courses_list.searchByCRN(copiedCommand.at(1))) {
+                            courses_list.addCourse(course);
+                        }
+                        else {
+                            cout << "Fail: cannot build course" << course.getDepartment() << course.getNumber() << "(CRN: " << course.getCRN() << "): CRN exists" << endl;
+                        }
                     }
                     else {
                         cout << "Input Error: illegal Course Number" << endl;
@@ -99,9 +108,7 @@ int main(){
             }
             if(regex_match(copiedCommand.at(1), match, regex("^[B][0-9]{8}"))) {
                 if(regex_match(copiedCommand.at(2), match, regex("^[a-z]+[a-z0-9]+[0-9]*"))) {
-                    cout << "Works here" << endl;
                     Student student(copiedCommand.at(1), copiedCommand.at(2), copiedCommand.at(3), copiedCommand.at(4));
-                    cout << "here" << endl;
                     if(persons_in_class.searchByBnum(copiedCommand.at(1))) {
                         persons_in_class.addStudent(student);
                     }
@@ -113,13 +120,12 @@ int main(){
                 else {
                     cout << "Input Error: invalid User ID" << endl;
                 }
-                // delete student;
             }
             else {
                 cout << "Input Error: invalid B-number" << endl;
             }
         }
-        else if(copiedCommand.front() == "add") {                                      // ADD
+        else if(copiedCommand.front() == "add") { // ADD
             smatch match;
             if(copiedCommand.size() < 3) {
                 cout << "Input Error: too few arguments" << endl;
@@ -127,8 +133,18 @@ int main(){
             }
             if(regex_match(copiedCommand.at(1), match, regex("^[B][0-9]{8}"))) {
                 if(regex_match(copiedCommand.at(2), match, regex("^[0-9]{6}"))){
-                    cout << "Success: added student " << copiedCommand.at(1) << " into course " << copiedCommand.at(2) << endl;
-                    cout << endl;
+                    Registration reg(copiedCommand.at(1), copiedCommand.at(2));
+                    if(courses_list.checkByCRN(copiedCommand.at(2)) && persons_in_class.checkByBNum(copiedCommand.at(1))) {
+                        if(regList.checkRegExists(reg) == true) {
+                            regList.addReg(reg);
+                        }
+                        else {
+                            cout << "Fail: cannot add, student " << copiedCommand.at(1) << " already enrolled in course " << copiedCommand.at(2) << endl;
+                        }
+                    }
+                    else {
+                        cout << "Fail: student or CRN doesn't exist" << endl;
+                    }
                 }
                 else {
                     cout << "Input Error: invalid CRN" << endl;
@@ -138,7 +154,7 @@ int main(){
                 cout << "Input Error: invalid B-number" << endl;
             }
         }
-        else if(copiedCommand.front() == "drop") {                                      // DROP
+        else if(copiedCommand.front() == "drop") { // DROP
             smatch match;
             if(copiedCommand.size() < 3) {
                 cout << "Input Error: too few arguments" << endl;
@@ -157,27 +173,29 @@ int main(){
                 cout << "Input Error: invalid B-number" << endl;
             }
         }
-        else if(copiedCommand.front() == "roster") {                                    // ROSTER
+        else if(copiedCommand.front() == "roster") { // ROSTER
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
                 exit(0);
             }
             if(regex_match(copiedCommand.at(1), match, regex("^[0-9]{6}"))) {
-                cout << "Roster: " << copiedCommand.at(1) << endl;
+                // cout << "Roster: " << copiedCommand.at(1) << endl;
+                regList.printRoster(copiedCommand.at(1));
             }
             else {
                 cout << "Input Error: invalid CRN" << endl;
             }
         }
-        else if(copiedCommand.front() == "schedule") {                                  // SCHEDULE
+        else if(copiedCommand.front() == "schedule") { // SCHEDULE
             smatch match;
             if(copiedCommand.size() < 2) {
                 cout << "Input Error: too few arguments" << endl;
                 exit(0);
             }
             else if(regex_match(copiedCommand.at(1), match, regex("^B[0-9]{8}"))) {
-                cout << "Student: " << copiedCommand.at(1) << endl;
+                // cout << "Student: " << copiedCommand.at(1) << endl;
+                regList.printSchedule(copiedCommand.at(1));
             }
             else {
                 cout << "Input Error: invalid B-number" << endl;

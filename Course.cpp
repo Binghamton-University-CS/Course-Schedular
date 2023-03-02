@@ -2,49 +2,57 @@
 #include <iostream>
 
 #include "Course.h"
-// #include "StudentList.cpp"
 
 Course::Course() {
     crn = "";
     name = "";
     department = "";
     number = "";
-    capacity = 1;
-    currentQuantity = 0;
-    listOfBnumbers = new string[capacity];
 }
 
-Course::~Course() {
-    delete[] listOfBnumbers;
+Course::Course(string newCRN, string newDepartment, string newNumber, string newName) {
+    crn = newCRN;
+    name = newName;
+    department = newDepartment;
+    number = newNumber;
 }
 
-void Course::addStudent(string addStudent) {
-    if(currentQuantity == capacity){
-        resizeArray();
-    }
-    listOfBnumbers[currentQuantity] = addStudent;
-    currentQuantity++;
-}
+// void Course::checkBNumberExists(string bNum) {
+//     for(int i = 0; i < currentQuantity; i++) {
+//         if(listOfBnumbers[i].getBNumber() == bNum) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }
 
-void Course::resizeArray() {
-    capacity = capacity * 2;
-    string* newStudent = new string[capacity];
+// void Course::addStudent(string addStudent) {
+//     if(currentQuantity == capacity){
+//         resizeArray();
+//     }
+//     listOfBnumbers[currentQuantity] = addStudent;
+//     currentQuantity++;
+// }
 
-    for(int i = 0; i < currentQuantity; i++){
-        newStudent[i] = listOfBnumbers[i]; // copy over values   
-    }
-    // memory management    
-    delete[] listOfBnumbers;
-    listOfBnumbers = newStudent;
-}
+// void Course::resizeArray() {
+//     capacity = capacity * 2;
+//     string* newStudent = new string[capacity];
 
-void Course::showRegStudents() {
-    int i;
+//     for(int i = 0; i < currentQuantity; i++){
+//         newStudent[i] = listOfBnumbers[i]; // copy over values   
+//     }
+//     // memory management    
+//     delete[] listOfBnumbers;
+//     listOfBnumbers = newStudent;
+// }
 
-    for(i = 0; i < currentQuantity; i++) {
-        cout << getCRN() << endl;
-    }
-}
+// void Course::showRegStudents() {
+//     int i;
+
+//     for(i = 0; i < currentQuantity; i++) {
+//         cout << getCRN() << endl;
+//     }
+// }
 
 string Course::getCRN(){
     return crn;

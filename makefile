@@ -16,8 +16,8 @@ OBJ = obj
 
 all: $(BIN)/$(EXE)
 
-$(BIN)/$(EXE): $(OBJ)/main.o $(OBJ)/Student.o $(OBJ)/StudentList.o $(OBJ)/Course.o $(OBJ)/CourseList.o 
-	$(CC) $(FLAGS) $(OBJ)/main.o $(OBJ)/Student.o $(OBJ)/StudentList.o $(OBJ)/Course.o $(OBJ)/CourseList.o -o $@
+$(BIN)/$(EXE): $(OBJ)/main.o $(OBJ)/Student.o $(OBJ)/StudentList.o $(OBJ)/Course.o $(OBJ)/CourseList.o $(OBJ)/Registration.o $(OBJ)/RegistrationList.o
+	$(CC) $(FLAGS) $(OBJ)/main.o $(OBJ)/Student.o $(OBJ)/StudentList.o $(OBJ)/Course.o $(OBJ)/CourseList.o $(OBJ)/Registration.o $(OBJ)/RegistrationList.o -o $@
 
 $(OBJ)/main.o: main.cpp
 	$(CC) $(FLAGS) -c main.cpp -o $@
@@ -32,7 +32,13 @@ $(OBJ)/Course.o: Course.cpp
 	$(CC) $(FLAGS) -c Course.cpp -o $@
 
 $(OBJ)/CourseList.o: CourseList.cpp
-	$(CC) $(FLAGS) -c CourseList.cpp -o $@
+	$(CC) $(FLAGS) -c CourseList.cpp -o $@ 
+
+$(OBJ)/Registration.o: Registration.cpp
+	$(CC) $(FLAGS) -c Registration.cpp -o $@
+
+$(OBJ)/RegistrationList.o: RegistrationList.cpp
+	$(CC) $(FLAGS) -c RegistrationList.cpp -o $@
 
 tar:	clean
 	tar cvvf $(TARFILE) $(REPODIR)
