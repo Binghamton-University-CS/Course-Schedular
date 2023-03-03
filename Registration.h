@@ -12,20 +12,11 @@ class Registration{
         string crn;
     
     public:
-        //? implement 4 constructors (default, copy, assignment)
         Registration();
         Registration(string newBNumber, string newCRN);
-
-        // getters: returns value
 
         string getCRN();
         string getBNumber();
 
-        // setters
-
-        void setCRN(string newFirstName);
-        void setBNumber(string newBNumber);
-
 };
-
 #endif

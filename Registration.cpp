@@ -20,11 +20,3 @@ string Registration::getCRN(){
 string Registration::getBNumber() {
     return bNumber;
 }
-
-void Registration::setCRN(string newCRN) {
-    crn = newCRN;
-}
-
-void Registration::setBNumber(string newBNumber) {
-    bNumber = newBNumber;
-}

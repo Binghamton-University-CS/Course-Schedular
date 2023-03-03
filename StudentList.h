@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -9,24 +10,6 @@ using namespace std;
 #include "Student.h"
 
 class StudentList {
-    public:
-        StudentList();
-        StudentList(string newBNumber, string newUserID, string newLast, string newFirst); // enroll
-        ~StudentList();
-
-        void addStudent(Student addStudent);
-        void removeStudent(Student removeStudent);
-        void enrollStudent(Student enrollStudent);
-        void resizeArray();
-        void print();
-        
-        bool checkByBNum(string newBNumber);
-        bool searchByBnum(string bNum);
-        string searchByBnumReturnName(string bNum);
-        // bool checkStudentExists(Student newStudent);
-
-        void printListOfCourses();
-
     private:
 
         // array values
@@ -37,20 +20,24 @@ class StudentList {
         string userID;
         string bNumber;
 
-        Student* allStudents; // list of all courses a student takes
+        Student* allStudents;
 
-        // getters: returns value
+    public:
+        StudentList();
+        StudentList(string newBNumber, string newUserID, string newLast, string newFirst); 
+        ~StudentList();
+
+        void addStudent(Student addStudent);
+        void resizeArray();
+        void print();
+        void printName(string bNum);
+        void searchByBnumPrintName(vector<string> bNums);
+        
+        bool searchByBnum(string bNum);
 
         string getFirstName();
         string getLastName();
         string getUserID();
         string getBNumber();
-
-        // setters
-
-        void setFirstName(string newFirstName);
-        void setLastName(string newLastName);
-        void setUserID(string newUserID);
-        void setBNumber(string newBNumber);
 };
 #endif

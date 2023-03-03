@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <vector>
 
 #include "RegistrationList.h"
 #include "StudentList.h"
@@ -21,15 +22,17 @@ RegistrationList::RegistrationList(string newBNumber, string newCRN) {
     allRegistrations = new Registration[capacity];
 }
 
-// Student::Student(const Student& student) {
-//     firstName = student.firstName;
-//     lastName = student.lastName;
-//     userID = student.userID;
-//     bNumber = student.bNumber;
-// }
-
 RegistrationList::~RegistrationList() {
     delete[] allRegistrations;
+}
+
+bool RegistrationList::check(Registration orgReg, Registration newReg) {
+    for(int i = 0; i < currentQuantity; i++) {
+        if(orgReg.getBNumber() == newReg.getBNumber() && orgReg.getCRN() == newReg.getCRN()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool RegistrationList::checkRegExists(Registration newReg) {
@@ -37,76 +40,31 @@ bool RegistrationList::checkRegExists(Registration newReg) {
         return true;
     }
     for(int i = 0; i < currentQuantity; i++) {
-        cout << "here?" << endl;
-        if(allRegistrations[i].getCRN() == newReg.getCRN() && allRegistrations[i].getBNumber() == newReg.getBNumber()) {
+        if(check(allRegistrations[i], newReg)) {
             return false;
         }
     }
-    cout << "1" << endl;
     return true;
 }
 
-bool RegistrationList::check(Registration newReg) {
-    StudentList student;
-    CourseList course;
-    for(int i = 0; i < currentQuantity; i++) {
-        if(student.checkByBNum(newReg.getBNumber())) {
-            if(course.checkByCRN(newReg.getCRN())) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-void RegistrationList::printRoster(string newCRN) {
-    StudentList newStudentList;
-    cout << "CRN: " << newCRN << endl;
-    int numStudent = 0;
+vector<string> RegistrationList::returnBnum(string newCRN) {
+    vector<string> bNumbers;
     for(int i = 0; i < currentQuantity; i++) {
         if(allRegistrations[i].getCRN() == newCRN) {
-            numStudent += 1;
+            bNumbers.push_back(allRegistrations[i].getBNumber()); 
         }
     }
-    cout << "Students: " << numStudent << endl;
-    for(int i = 0; i < currentQuantity; i++) {
-        if(allRegistrations[i].getCRN() == newCRN) {
-            string name = newStudentList.searchByBnumReturnName(allRegistrations[i].getBNumber());
-            cout << allRegistrations[i].getBNumber() << " " << name << endl;
-        }
-    }
-
+    return bNumbers;
 }
 
-void RegistrationList::printSchedule(string newBNumber) {
-    CourseList newCourseList;
-    StudentList newStudentList;
-    cout << "Student: " << newBNumber << ": ";
+vector<string> RegistrationList::returnCrn(string newBNumber) {
+    vector<string> crns;
     for(int i = 0; i < currentQuantity; i++) {
         if(allRegistrations[i].getBNumber() == newBNumber) {
-            string name = newStudentList.searchByBnumReturnName(allRegistrations[i].getBNumber());
-            cout << allRegistrations[i].getBNumber() << " " << name << endl;
-            break;
+            crns.push_back(allRegistrations[i].getCRN()); 
         }
     }
-    for(int i = 0; i < currentQuantity; i++) {
-        if(allRegistrations[i].getBNumber() == newBNumber) {
-            string info = newCourseList.searchByCRNReturnInfo(allRegistrations[i].getCRN());
-            cout << allRegistrations[i].getCRN() << " " << info << endl;
-        }
-    }
-}
-
-void RegistrationList::resizeArray(){
-    capacity = capacity * 2;
-    Registration* newReg = new Registration[capacity];
-
-    for(int i = 0; i < currentQuantity; i++){
-        newReg[i] = allRegistrations[i]; // copy over values   
-    }
-    // memory management    
-    delete[] allRegistrations;
-    allRegistrations = newReg;
+    return crns;
 }
 
 void RegistrationList::addReg(Registration addReg) {
@@ -114,22 +72,88 @@ void RegistrationList::addReg(Registration addReg) {
         resizeArray();
     }
     allRegistrations[currentQuantity] = addReg;
+    printAdd();
     currentQuantity += 1;
-    print();
 }
 
 void RegistrationList::dropReg(Registration dropReg) {
-    // int size = currentQuantity;
-
-    // for(int i = 0; i < size; i++) {
-    //     if(allRegistrations[i].getBNumber() == removeReg.getBNumber)
-    // }
+    if(currentQuantity == 1) {
+        currentQuantity -= 1;
+        printDrop(dropReg);
+    }
+    else {
+        int position;
+        for(int i = (currentQuantity-1);i >= 0; i--) {
+            if(check(allRegistrations[i], dropReg)) {
+                position = i;
+            }
+        }
+        if(position == currentQuantity - 1) {
+            currentQuantity -= 1;
+        }
+        else {
+            while(position < currentQuantity) {
+                allRegistrations[position] = allRegistrations[position+1];
+                position++;
+            }
+            currentQuantity -= 1;
+        }
+        printDrop(dropReg);
+    }
 }
 
- void RegistrationList::print() {
-    for(int i = 0; i < currentQuantity; i++) {
-        cout << "Success: added student " << allRegistrations[i].getBNumber() << " into course " << allRegistrations[i].getCRN() << endl;
+void RegistrationList::cancelReg(string cancelReg) {
+    Registration* temp = new Registration[capacity];
+    for(int i = 0; i <= currentQuantity; i++) {
+        temp[i] = allRegistrations[i];
     }
+
+    int size = currentQuantity;
+    if(currentQuantity == 1) {
+        currentQuantity -= 1;
+    }
+    else {
+        for(int i = (size-1); i >= 0; i--) {
+            if(temp[i].getCRN() == cancelReg) {
+                if(i == size - 1) { 
+                    currentQuantity -= 1;
+                }
+                else {
+                    int j = i;
+                    while(j < size-1) {
+                        allRegistrations[j] = allRegistrations[j+1];
+                        j++;
+                    }
+                    currentQuantity -= 1;
+                }
+            }
+        }
+    }
+    delete[] temp;
+    printCancel(cancelReg);
+}
+
+void RegistrationList::resizeArray(){
+    capacity = capacity * 2;
+    Registration* newReg = new Registration[capacity];
+
+    for(int i = 0; i < currentQuantity; i++){
+        newReg[i] = allRegistrations[i]; 
+    }  
+    delete[] allRegistrations;
+    allRegistrations = newReg;
+}
+
+void RegistrationList::printCancel(string cancelReg) {
+    cout << "Success: cancelled course " << cancelReg << endl;
+ }
+
+void RegistrationList::printDrop(Registration dropReg) {
+    cout << "Success: removed student " << dropReg.getBNumber() << " from course " << dropReg.getCRN() << endl;
+ }
+
+void RegistrationList::printAdd() {
+    cout << "Success: added student " << allRegistrations[currentQuantity].getBNumber() << " into course " << allRegistrations[currentQuantity].getCRN() << endl;
  }
 
 string RegistrationList::getBNumber(){
@@ -138,12 +162,4 @@ string RegistrationList::getBNumber(){
 
 string RegistrationList::getCRN() {
     return crn;
-}
-
-void RegistrationList::setCRN(string newCRN) {
-    crn = newCRN;
-}
-
-void RegistrationList::setBNumber(string newBNumber) {
-    bNumber = newBNumber;
 }

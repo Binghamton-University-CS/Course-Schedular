@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -10,7 +11,6 @@ using namespace std;
 
 class CourseList {
     private:
-        // array values
         int capacity;
         int currentQuantity;
         string crn;
@@ -25,32 +25,17 @@ class CourseList {
         CourseList(string newCRN, string newDepartment, string newNumber, string newName);
         ~CourseList();
 
-        // void whatever(int course);
-
         bool searchByCRN(string newCrn);
-        string searchByCRNReturnInfo(string info);
-
+        void searchByCRNPrintInfo(vector<string> crn);
         void addCourse(Course addCourse);
-        // void addCourse();
-        void removeCourse(Course removeCourse);
+        void removeCourse(string removeCourse);
         void resizeArray();
-        void printListOfStudents(Course allCourses);
-        void print();
-
+        void printBuild();
         bool checkByCRN(string newCRN);
-
-        // getters: returns value
 
         string getCRN();
         string getName();
         string getDepartment();
         string getNumber();
-
-        // setters
-
-        void setCRN(string newCRN);
-        void setName(string newName);
-        void setDepartment(string newDepartment);
-        void setNumber(string newNumber);
 };
 #endif

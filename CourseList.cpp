@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <vector>
 
 #include "CourseList.h"
 
@@ -36,15 +37,14 @@ bool CourseList::searchByCRN(string newCRN){
     return true;
 }
 
-string CourseList::searchByCRNReturnInfo(string info) {
-    string str = "";
+void CourseList::searchByCRNPrintInfo(vector<string> crn) {
     for(int i = 0; i < currentQuantity; i++) {
-        if(allCourses[i].getCRN() == info) {
-            str += allCourses[i].getDepartment() + " " + allCourses[i].getNumber() + " " + allCourses[i].getName();
-            return str;
+        for(unsigned int j = 0; j < crn.size(); j++) {
+            if(allCourses[i].getCRN() == crn.at(j)) {
+                cout << allCourses[i].getCRN() << " " << allCourses[i].getDepartment() << " " << allCourses[i].getNumber() << " " << allCourses[i].getName() << endl;
+            }
         }
     }
-    return "";
 }
 
 bool CourseList::checkByCRN(string newCRN) {
@@ -62,44 +62,51 @@ void CourseList::addCourse(Course addCourse) {
     }
     if(searchByCRN(addCourse.getCRN())) {
         allCourses[currentQuantity] = addCourse;
+        printBuild();
         currentQuantity += 1;
-        print();
     }
     else {
         cout << "Fail: cannot enroll student, B Number exists" << endl;
     }
 }
 
-// void CourseList::whatever(int course) {
-//     cout << course << endl;
-// }
-
-void CourseList::print() {
-    for(int i = 0; i < currentQuantity; i++) {
-        cout << "Success: built course " << allCourses[i].getDepartment() << allCourses[i].getNumber() << " (CRN: " << allCourses[i].getCRN() << "): " << allCourses[i].getName() << endl;
+void CourseList::removeCourse(string removeCourse) {
+    if(currentQuantity == 1) {
+        currentQuantity -= 1;
+    }
+    else {
+        int position;
+        for(int i = (currentQuantity-1);i >= 0; i--) {
+            if(allCourses[i].getCRN() == removeCourse) {
+                position = i;
+            }
+        }
+        if(position == currentQuantity - 1) {
+            currentQuantity -= 1;
+        }
+        else {
+            while(position < currentQuantity) {
+                allCourses[position] = allCourses[position+1];
+                position++;
+            }
+            currentQuantity -= 1;
+        }
     }
 }
-
-// void CourseList::removeCourse(Course removeCourse) {
-//     if(checkCourseExists(removeCourse)) {
-//         cout << "Student doesn't exists" << endl;
-//     }
-//     else {
-//         // allCourses[currentQuantity] = NULL;
-//         currentQuantity -= 1;
-//     }
-// }
 
 void CourseList::resizeArray(){
     capacity = capacity * 2;
     Course* newCourses = new Course[capacity];
 
     for(int i = 0; i < currentQuantity; i++){
-        newCourses[i] = allCourses[i]; // copy over values   
+        newCourses[i] = allCourses[i]; 
     }
-    // memory management   
     delete[] allCourses;
     allCourses = newCourses;
+}
+
+void CourseList::printBuild() {
+    cout << "Success: built course " << allCourses[currentQuantity].getDepartment() << allCourses[currentQuantity].getNumber() << " (CRN: " << allCourses[currentQuantity].getCRN() << "): " << allCourses[currentQuantity].getName() << endl;
 }
 
 string CourseList::getCRN(){
@@ -116,20 +123,4 @@ string CourseList::getName() {
 
 string CourseList::getNumber() {
     return number;
-}
-
-void CourseList::setCRN(string newCRN) {
-    crn = newCRN;
-}
-
-void CourseList::setDepartment(string newDepartment) {
-    department = newDepartment;
-}
-
-void CourseList::setName(string newName) {
-    name = newName;
-}
-
-void CourseList::setNumber(string newNumber) {
-    number = newNumber;
 }

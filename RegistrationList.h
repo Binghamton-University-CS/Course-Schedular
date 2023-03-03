@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -24,24 +25,20 @@ class RegistrationList {
 
         void addReg(Registration addReg);
         void dropReg(Registration dropReg);
+        void cancelReg(string cancelReg);
         void resizeArray();
-        void printListOfStudents(Registration allCourses);
-        void printRoster(string newCRN);
-        void printSchedule(string newBNumber);
-        void print();
-
-        bool check(Registration newReg);
-        bool checkRegExists(Registration newReg);
+        
+        vector<string> returnBnum(string newCRN);
+        vector<string> returnCrn(string newBNumber);
+        void printAdd();
+        void printDrop(Registration dropReg);
+        void printCancel(string cancelReg);
         void searchByCRN(string newCRN);
 
-        // getters: returns value
+        bool check(Registration orgReg, Registration newReg);
+        bool checkRegExists(Registration newReg);
 
         string getCRN();
         string getBNumber();
-
-        // setters
-
-        void setCRN(string newCRN);
-        void setBNumber(string newName);
 };
 #endif
